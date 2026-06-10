@@ -13,6 +13,7 @@ import numpy as np
 
 import torch
 
+from src.dataloader.reader_custom_colmap_dataset import read_custom_colmap_dataset
 from src.dataloader.reader_colmap_dataset import read_colmap_dataset
 from src.dataloader.reader_nerf_dataset import read_nerf_dataset
 from src.utils.camera_utils import interpolate_poses
@@ -53,6 +54,15 @@ class DataPack:
         s_time = time.perf_counter()
 
         if os.path.exists(sparse_path) or os.path.exists(colmap_path):
+            print("Read dataset in CUSTOM COLMAP format.")
+            dataset = read_custom_colmap_dataset(
+                source_path=source_path,
+                image_dir_name=image_dir_name,
+                use_test=use_test,
+                test_every=test_every,
+                camera_creator=camera_creator,
+            )
+        elif os.path.exists(sparse_path) or os.path.exists(colmap_path):
             print("Read dataset in COLMAP format.")
             dataset = read_colmap_dataset(
                 source_path=source_path,
